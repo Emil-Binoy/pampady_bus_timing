@@ -84,7 +84,7 @@ export default function SearchCard({
                 placeholder={
                   selectedRoute
                     ? `📍 ${selectedRoute.englishName}`
-                    : 'Type destination... (e.g. Kottayam)'
+                    : 'Type destination...'
                 }
                 className="w-full bg-slate-50 text-slate-900 placeholder:text-slate-400 pl-4 pr-12 py-4 rounded-2xl border-2 border-blue-500 focus:border-blue-600 focus:bg-white focus:ring-4 focus:ring-blue-500/10 text-base font-semibold outline-none transition-all duration-200 min-h-[56px]"
               />

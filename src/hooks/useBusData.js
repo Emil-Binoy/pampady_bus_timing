@@ -36,15 +36,7 @@ export function useBusData() {
       setRoutes(fetchedRoutes);
       setLastUpdated(fetchedSettings.lastUpdated || '17-06-2026');
 
-      // Auto-select "Kottayam" or first route if available on initial load
-      if (fetchedRoutes.length > 0) {
-        const defaultRoute =
-          fetchedRoutes.find(
-            (r) => r.englishName.toLowerCase() === 'kottayam'
-          ) || fetchedRoutes[0];
-        
-        setSelectedRoute(defaultRoute);
-      }
+      
     } catch (err) {
       console.error('Error initializing bus data:', err);
       setRoutesError('Failed to load bus routes. Please check your internet connection.');
