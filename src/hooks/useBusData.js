@@ -4,7 +4,6 @@ import { fetchRoutes, fetchDestinationBuses, fetchSettings, clearCache } from '.
 // Popular destinations list specified in requirements
 const POPULAR_DESTINATION_KEYS = [
   'Kottayam',
-  'Ernakulam',
   'Changanassery',
   'Pala',
   'Thiruvalla',
@@ -154,7 +153,7 @@ export function useBusData() {
     return buses.filter((bus) => {
       if (busFilter === 'KSRTC') return bus.isKsrtc;
       if (busFilter === 'PRIVATE') return !bus.isKsrtc;
-      if (busFilter === 'UPCOMING') return bus.minutes >= currentMinutes;
+      if (busFilter === 'UPCOMING') return bus.minutes > currentMinutes;
       return true; // ALL
     });
   }, [buses, busFilter, currentMinutes]);

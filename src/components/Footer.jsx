@@ -1,5 +1,6 @@
 import React from 'react';
 import { Bus, Clock, ShieldCheck, Heart, RefreshCw, Sparkles } from 'lucide-react';
+import logoImg from '../assets/logo.png';
 
 export default function Footer({ lastUpdated, onRefresh }) {
   return (
@@ -11,8 +12,8 @@ export default function Footer({ lastUpdated, onRefresh }) {
           {/* Brand Column */}
           <div className="md:col-span-6 space-y-3">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-amber-950 flex items-center justify-center border border-amber-500/30">
-                <Bus className="w-5 h-5 text-amber-400" />
+              <div className="w-9 h-9 rounded-full overflow-hidden border border-amber-500/30 bg-amber-950 flex items-center justify-center">
+                <img src={logoImg} alt="Pampady Logo" className="w-full h-full object-cover" />
               </div>
               <div>
                 <h3 className="text-base font-bold text-white leading-tight">

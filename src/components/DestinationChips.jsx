@@ -8,12 +8,13 @@ export default function DestinationChips({
 }) {
   return (
     <div className="space-y-2.5">
-      <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+      <p className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
         <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-        <span>Popular Searches</span>
-      </div>
+        Popular Destinations
+      </p>
 
-      <div className="flex flex-wrap gap-2 pt-0.5">
+      {/* Wrap chips — large tap area for thumbs */}
+      <div className="flex flex-wrap gap-2">
         {popularRoutes.map((route) => {
           const isSelected =
             selectedRoute &&
@@ -25,16 +26,16 @@ export default function DestinationChips({
               key={route.id || route.englishName}
               type="button"
               onClick={() => onSelectRoute(route)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 active:scale-95 flex items-center gap-1.5 border ${
+              className={`px-4 py-2.5 rounded-xl text-sm font-bold min-h-[44px] transition-all duration-200 active:scale-95 border ${
                 isSelected
                   ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20'
-                  : 'bg-blue-50/70 text-blue-700 border-blue-100 hover:bg-blue-100 hover:border-blue-200'
+                  : 'bg-slate-50 text-slate-800 border-slate-200 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700'
               }`}
             >
-              <span>{route.englishName}</span>
+              {route.englishName}
               {route.malayalamName && (
-                <span className={`text-[10px] opacity-80 ${isSelected ? 'text-blue-100' : 'text-blue-600'}`}>
-                  • {route.malayalamName}
+                <span className={`ml-1 text-xs font-normal ${isSelected ? 'text-blue-200' : 'text-slate-400'}`}>
+                  · {route.malayalamName}
                 </span>
               )}
             </button>

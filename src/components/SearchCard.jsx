@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, MapPin, X, ArrowRight, Check } from 'lucide-react';
+import { Search, MapPin, X, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import DestinationChips from './DestinationChips';
 
@@ -16,7 +16,6 @@ export default function SearchCard({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -35,34 +34,46 @@ export default function SearchCard({
   const handleSelectSuggestion = (route) => {
     onSelectRoute(route);
     setIsDropdownOpen(false);
+    // Scroll to results
+    setTimeout(() => {
+      const el = document.getElementById('bus-results');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 200);
   };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (filteredRoutes.length > 0) {
-      onSelectRoute(filteredRoutes[0]);
-      setIsDropdownOpen(false);
+      handleSelectSuggestion(filteredRoutes[0]);
     }
   };
 
   return (
-    <div id="search-card-section" className="relative max-w-4xl mx-auto px-4 sm:px-6 -mt-8 sm:-mt-10 z-30">
+    <div id="search-card-section" className="relative max-w-2xl mx-auto px-3 sm:px-6 -mt-6 sm:-mt-8 z-30">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="bg-white rounded-3xl p-5 sm:p-7 shadow-xl shadow-slate-200/70 border border-slate-100/90 backdrop-blur-xl relative"
+        className="bg-white rounded-3xl p-5 sm:p-6 shadow-xl shadow-slate-200/60 border border-slate-100"
       >
         {/* Header */}
-        <div className="flex items-center gap-2 mb-4 text-slate-800 font-bold text-base sm:text-lg">
-          <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
-            <MapPin className="w-4 h-4 stroke-[2.5]" />
+        <div className="flex items-center gap-2.5 mb-4">
+          <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+            <MapPin className="w-5 h-5 text-blue-600 stroke-[2.5]" />
           </div>
-          <h2>Search Destination</h2>
+          <div>
+            <h2 className="text-lg font-extrabold text-slate-900 leading-tight">
+              Search Destination
+            </h2>
+            <p className="text-xs text-slate-500 font-medium">
+              Where do you want to go?
+            </p>
+          </div>
         </div>
 
-        {/* Form / Search Input with Autocomplete */}
         <form onSubmit={handleSearchSubmit} className="space-y-4">
+
+          {/* Search Input — large for easy typing */}
           <div className="relative" ref={dropdownRef}>
             <div className="relative flex items-center">
               <input
@@ -72,26 +83,27 @@ export default function SearchCard({
                 onFocus={() => setIsDropdownOpen(true)}
                 placeholder={
                   selectedRoute
-                    ? `Selected: ${selectedRoute.englishName} (Search other...)`
-                    : 'Enter destination or place (e.g. Kottayam, Pala)'
+                    ? `📍 ${selectedRoute.englishName}`
+                    : 'Type destination... (e.g. Kottayam)'
                 }
-                className="w-full bg-slate-50 text-slate-900 placeholder:text-slate-400 pl-4 pr-12 py-3.5 sm:py-4 rounded-2xl border border-slate-200 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 text-sm sm:text-base font-medium outline-none transition-all duration-200"
+                className="w-full bg-slate-50 text-slate-900 placeholder:text-slate-400 pl-4 pr-12 py-4 rounded-2xl border-2 border-blue-500 focus:border-blue-600 focus:bg-white focus:ring-4 focus:ring-blue-500/10 text-base font-semibold outline-none transition-all duration-200 min-h-[56px]"
               />
-
               {searchQuery ? (
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-4 text-slate-400 hover:text-slate-600 p-1 rounded-full hover:bg-slate-200/50 transition-colors"
+                  className="absolute right-3 p-2 rounded-full text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                 >
                   <X className="w-5 h-5" />
                 </button>
               ) : (
-                <Search className="absolute right-4 w-5 h-5 text-slate-400 pointer-events-none" />
+                <div className="absolute right-3 p-2 pointer-events-none">
+                  <Search className="w-5 h-5 text-slate-400" />
+                </div>
               )}
             </div>
 
-            {/* Autocomplete Suggestions Dropdown */}
+            {/* Autocomplete Dropdown */}
             <AnimatePresence>
               {isDropdownOpen && searchQuery.trim().length > 0 && (
                 <motion.div
@@ -99,10 +111,10 @@ export default function SearchCard({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -5 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-2xl border border-slate-100 max-h-60 overflow-y-auto z-50 divide-y divide-slate-50"
+                  className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-2xl border border-slate-100 max-h-64 overflow-y-auto z-50"
                 >
                   {loadingRoutes ? (
-                    <div className="p-4 text-center text-xs text-slate-500 font-medium">
+                    <div className="p-5 text-center text-sm text-slate-500 font-medium">
                       Loading destinations...
                     </div>
                   ) : filteredRoutes.length > 0 ? (
@@ -113,33 +125,26 @@ export default function SearchCard({
                           key={route.id}
                           type="button"
                           onClick={() => handleSelectSuggestion(route)}
-                          className="w-full px-4 py-3 text-left hover:bg-blue-50 flex items-center justify-between transition-colors group"
+                          className="w-full px-4 py-4 text-left border-b border-slate-50 last:border-0 hover:bg-blue-50 flex items-center justify-between gap-3 transition-colors min-h-[60px]"
                         >
                           <div className="flex items-center gap-3">
-                            <MapPin className="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition-colors" />
+                            <MapPin className="w-5 h-5 text-blue-500 shrink-0" />
                             <div>
-                              <p className="text-sm font-semibold text-slate-800 group-hover:text-blue-600">
+                              <p className="text-base font-bold text-slate-800">
                                 {route.englishName}
                               </p>
                               {route.malayalamName && (
-                                <p className="text-xs text-slate-500 font-normal">
-                                  {route.malayalamName}
-                                </p>
+                                <p className="text-sm text-slate-500">{route.malayalamName}</p>
                               )}
                             </div>
                           </div>
-
-                          {isSelected ? (
-                            <Check className="w-4 h-4 text-blue-600" />
-                          ) : (
-                            <ArrowRight className="w-4 h-4 text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity" />
-                          )}
+                          {isSelected && <Check className="w-5 h-5 text-blue-600 shrink-0" />}
                         </button>
                       );
                     })
                   ) : (
-                    <div className="p-4 text-center text-xs text-slate-500 font-medium">
-                      No matching destinations found for &quot;{searchQuery}&quot;
+                    <div className="p-5 text-center text-sm text-slate-500 font-medium">
+                      No results for &quot;{searchQuery}&quot;
                     </div>
                   )}
                 </motion.div>
@@ -147,23 +152,27 @@ export default function SearchCard({
             </AnimatePresence>
           </div>
 
-          {/* Popular Destination Chips */}
+          {/* Popular Chips */}
           <DestinationChips
             popularRoutes={popularRoutes}
             selectedRoute={selectedRoute}
             onSelectRoute={(route) => {
               onSelectRoute(route);
               setIsDropdownOpen(false);
+              setTimeout(() => {
+                const el = document.getElementById('bus-results');
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }, 200);
             }}
           />
 
-          {/* Search Button */}
+          {/* Big Search Button */}
           <button
             type="submit"
-            className="w-full mt-3 bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-bold py-3.5 sm:py-4 px-6 rounded-2xl shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40 transition-all duration-200 flex items-center justify-center gap-2.5 text-base sm:text-lg cursor-pointer"
+            className="w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-extrabold py-4 px-6 rounded-2xl shadow-lg shadow-blue-600/25 transition-all duration-200 flex items-center justify-center gap-3 text-lg min-h-[56px] cursor-pointer"
           >
             <Search className="w-5 h-5 stroke-[2.5]" />
-            <span>Search Buses</span>
+            Search Buses
           </button>
         </form>
       </motion.div>
