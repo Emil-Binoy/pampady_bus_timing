@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import SearchCard from '../components/SearchCard';
@@ -6,10 +6,14 @@ import BusList from '../components/BusList';
 import Footer from '../components/Footer';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import EmptyState from '../components/EmptyState';
+import LogoModal from '../components/LogoModal';
 import { useBusData } from '../hooks/useBusData';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 
 export default function Home() {
+  const [logoModalOpen, setLogoModalOpen] = useState(false);
+  const handleOpenLogo = () => setLogoModalOpen(true);
+
   const {
     routes,
     selectedRoute,
@@ -51,10 +55,11 @@ export default function Home() {
         isRefreshing={loadingRoutes || loadingBuses}
         lastUpdated={lastUpdated}
         onSelectPopular={handleSelectPopularByName}
+        onOpenLogo={handleOpenLogo}
       />
 
       {/* Hero Banner */}
-      <Hero />
+      <Hero onOpenLogo={handleOpenLogo} />
 
       {/* Floating Search Card */}
       <SearchCard
@@ -99,7 +104,10 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <Footer lastUpdated={lastUpdated} onRefresh={handleRefresh} />
+      <Footer lastUpdated={lastUpdated} onRefresh={handleRefresh} onOpenLogo={handleOpenLogo} />
+
+      {/* Logo Lightbox Modal */}
+      <LogoModal isOpen={logoModalOpen} onClose={() => setLogoModalOpen(false)} />
     </div>
   );
 }

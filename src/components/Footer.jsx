@@ -2,7 +2,7 @@ import React from 'react';
 import { Bus, Clock, ShieldCheck, Heart, RefreshCw, Sparkles } from 'lucide-react';
 import logoImg from '../assets/logo.png';
 
-export default function Footer({ lastUpdated, onRefresh }) {
+export default function Footer({ lastUpdated, onRefresh, onOpenLogo }) {
   return (
     <footer className="w-full bg-slate-900 text-slate-400 border-t border-slate-800 mt-16 pt-12 pb-8 px-4 sm:px-6">
       <div className="max-w-4xl mx-auto space-y-8">
@@ -11,20 +11,24 @@ export default function Footer({ lastUpdated, onRefresh }) {
           
           {/* Brand Column */}
           <div className="md:col-span-6 space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full overflow-hidden border border-amber-500/30 bg-amber-950 flex items-center justify-center">
-                <img src={logoImg} alt="Pampady Logo" className="w-full h-full object-cover" />
+            <div
+              onClick={onOpenLogo}
+              className="flex items-center gap-3 cursor-pointer group w-fit"
+              title="Click to view logo"
+            >
+              <div className="w-11 h-11 rounded-full overflow-hidden border-2 border-amber-400 bg-amber-950 flex items-center justify-center shrink-0 shadow-lg group-hover:scale-110 transition-transform">
+                <img src={logoImg} alt="Cathedral OCYM Pampady" className="w-full h-full object-cover" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-white leading-tight">
+                <h3 className="text-base font-extrabold text-white leading-tight group-hover:text-amber-300 transition-colors">
                   Pampady Bus Stand
                 </h3>
-                <p className="text-xs text-blue-400 font-semibold">Live Bus Timings Portal</p>
+                <p className="text-xs text-amber-400 font-bold">An Initiative by Cathedral OCYM Pampady</p>
               </div>
             </div>
 
             <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
-              Your digital bus timetable for Pampady Bus Stand, Kottayam. Real-time access to KSRTC and Private bus schedules.
+              Your digital bus timetable for Pampady Bus Stand, Kottayam. Real-time access to KSRTC and Private bus schedules. Built & maintained by Cathedral OCYM Pampady.
             </p>
 
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-300 text-xs font-medium">
@@ -61,11 +65,15 @@ export default function Footer({ lastUpdated, onRefresh }) {
 
         {/* Bottom Credits & Copyright */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 flex-wrap justify-center sm:justify-start">
             <span>Pampady Bus Stand Timings © {new Date().getFullYear()}</span>
             <span>•</span>
-            <span className="flex items-center gap-1">
-              Made with <Heart className="w-3 h-3 text-red-500 fill-red-500 inline" /> for commuters
+            <span
+              onClick={onOpenLogo}
+              className="flex items-center gap-1 text-slate-300 font-semibold cursor-pointer hover:text-amber-400 transition-colors"
+              title="Click to view logo"
+            >
+              Built with <Heart className="w-3 h-3 text-red-500 fill-red-500 inline" /> by <strong className="text-amber-400 font-bold underline underline-offset-2">Cathedral OCYM Pampady</strong>
             </span>
           </div>
 

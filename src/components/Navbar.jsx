@@ -3,7 +3,7 @@ import { Menu, X, Bus, RefreshCw, Clock, MapPin, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import logoImg from '../assets/logo.png';
 
-export default function Navbar({ onRefresh, isRefreshing, lastUpdated, onSelectPopular }) {
+export default function Navbar({ onRefresh, isRefreshing, lastUpdated, onSelectPopular, onOpenLogo }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -16,14 +16,23 @@ export default function Navbar({ onRefresh, isRefreshing, lastUpdated, onSelectP
             className="flex items-center gap-3 cursor-pointer min-w-0"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full overflow-hidden shadow border border-amber-500/40 shrink-0">
-              <img src={logoImg} alt="Pampady Bus Stand Logo" className="w-full h-full object-cover" />
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpenLogo?.();
+              }}
+              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full overflow-hidden shadow-sm border-2 border-amber-500/60 shrink-0 bg-white hover:scale-110 active:scale-95 transition-transform cursor-pointer"
+              title="Click to view logo"
+            >
+              <img src={logoImg} alt="Cathedral OCYM Pampady Logo" className="w-full h-full object-cover" />
             </div>
             <div className="min-w-0">
               <h1 className="text-sm sm:text-base font-extrabold text-slate-900 leading-tight truncate">
                 Pampady Bus Stand
               </h1>
-              <p className="text-xs font-bold text-blue-600">Bus Timings</p>
+              <p className="text-[11px] sm:text-xs font-extrabold text-amber-600 truncate">
+                By Cathedral OCYM Pampady
+              </p>
             </div>
           </div>
 
@@ -73,12 +82,19 @@ export default function Navbar({ onRefresh, isRefreshing, lastUpdated, onSelectP
               {/* Drawer Header */}
               <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full overflow-hidden border border-amber-400/40 shrink-0">
-                    <img src={logoImg} alt="Logo" className="w-full h-full object-cover" />
+                  <div
+                    onClick={() => {
+                      setMenuOpen(false);
+                      onOpenLogo?.();
+                    }}
+                    className="w-10 h-10 rounded-full overflow-hidden border-2 border-amber-500/60 shrink-0 hover:scale-110 transition-transform cursor-pointer"
+                    title="Click to view logo"
+                  >
+                    <img src={logoImg} alt="Cathedral OCYM Pampady" className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <p className="font-extrabold text-slate-900 text-sm">Pampady Bus Stand</p>
-                    <p className="text-xs text-blue-600 font-bold">Live Timings</p>
+                    <p className="text-xs text-amber-600 font-bold">Cathedral OCYM Pampady</p>
                   </div>
                 </div>
                 <button
@@ -115,12 +131,12 @@ export default function Navbar({ onRefresh, isRefreshing, lastUpdated, onSelectP
               </div>
 
               {/* Drawer Footer */}
-              <div className="px-5 py-4 border-t border-slate-100 space-y-1">
+              <div className="px-5 py-4 border-t border-slate-100 space-y-1.5">
                 <div className="flex items-center gap-2 text-slate-700">
                   <Info className="w-4 h-4 text-blue-500 shrink-0" />
                   <p className="text-sm font-semibold">Last Updated: <span className="text-blue-600">{lastUpdated}</span></p>
                 </div>
-                <p className="text-xs text-slate-500 pl-6">Timings are subject to change.</p>
+                <p className="text-xs font-bold text-amber-600">Built by Cathedral OCYM Pampady</p>
               </div>
             </motion.div>
           </>
