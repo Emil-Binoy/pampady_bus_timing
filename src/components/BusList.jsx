@@ -21,6 +21,7 @@ export default function BusList({
   const currentMinutes = now.getHours() * 60 + now.getMinutes();
   const ksrtcCount = rawBuses ? rawBuses.filter((b) => b.isKsrtc).length : 0;
   const privateCount = rawBuses ? rawBuses.filter((b) => !b.isKsrtc).length : 0;
+  const upcomingCount = rawBuses ? rawBuses.filter((b) => b.minutes >= currentMinutes).length : 0;
 
   // Find the next upcoming bus index (across the full filtered list)
   const nextBusIdx = buses.findIndex((b) => b.minutes >= currentMinutes);
@@ -52,10 +53,10 @@ export default function BusList({
       {!loadingBuses && !busesError && rawBuses.length > 0 && (
         <div className="flex gap-2 overflow-x-auto pb-1">
           {[
-            { key: 'ALL',      label: `All (${rawBuses.length})`,    active: 'bg-blue-600 text-white' },
-            { key: 'UPCOMING', label: '🕐 Upcoming',                  active: 'bg-emerald-600 text-white'},
-            { key: 'KSRTC',    label: `KSRTC (${ksrtcCount})`,       active: 'bg-red-600 text-white'  },
-            { key: 'PRIVATE',  label: `Private (${privateCount})`,    active: 'bg-slate-800 text-white'},
+            { key: 'UPCOMING', label: `🕐 Upcoming (${upcomingCount})`, active: 'bg-emerald-600 text-white'},
+            { key: 'ALL',      label: `All (${rawBuses.length})`,        active: 'bg-blue-600 text-white' },
+            { key: 'KSRTC',    label: `KSRTC (${ksrtcCount})`,           active: 'bg-red-600 text-white'  },
+            { key: 'PRIVATE',  label: `Private (${privateCount})`,        active: 'bg-slate-800 text-white'},
           ].map(({ key, label, active }) => (
             <button
               key={key}

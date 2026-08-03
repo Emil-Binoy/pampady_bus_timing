@@ -16,7 +16,7 @@ export function useBusData() {
   const [buses, setBuses] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [lastUpdated, setLastUpdated] = useState('17-06-2026');
-  const [busFilter, setBusFilter] = useState('ALL'); // 'ALL' | 'KSRTC' | 'PRIVATE' | 'UPCOMING'
+  const [busFilter, setBusFilter] = useState('UPCOMING'); // 'UPCOMING' | 'ALL' | 'KSRTC' | 'PRIVATE'
 
   const [loadingRoutes, setLoadingRoutes] = useState(true);
   const [loadingBuses, setLoadingBuses] = useState(false);
@@ -145,7 +145,7 @@ export function useBusData() {
     return buses.filter((bus) => {
       if (busFilter === 'KSRTC') return bus.isKsrtc;
       if (busFilter === 'PRIVATE') return !bus.isKsrtc;
-      if (busFilter === 'UPCOMING') return bus.minutes > currentMinutes;
+      if (busFilter === 'UPCOMING') return bus.minutes >= currentMinutes;
       return true; // ALL
     });
   }, [buses, busFilter, currentMinutes]);
@@ -154,6 +154,7 @@ export function useBusData() {
   const selectRoute = useCallback((route) => {
     setSelectedRoute(route);
     setSearchQuery('');
+    setBusFilter('UPCOMING');
   }, []);
 
   // Force refresh current data
