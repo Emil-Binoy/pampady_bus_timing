@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Search, MapPin, X, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import DestinationChips from './DestinationChips';
 
 export default function SearchCard({
   routes,
@@ -10,7 +9,6 @@ export default function SearchCard({
   filteredRoutes,
   selectedRoute,
   onSelectRoute,
-  popularRoutes,
   loadingRoutes,
 }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -33,8 +31,8 @@ export default function SearchCard({
 
   const handleSelectSuggestion = (route) => {
     onSelectRoute(route);
+    setSearchQuery(route.englishName);
     setIsDropdownOpen(false);
-    // Scroll to results
     setTimeout(() => {
       const el = document.getElementById('bus-results');
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -46,6 +44,11 @@ export default function SearchCard({
     if (filteredRoutes.length > 0) {
       handleSelectSuggestion(filteredRoutes[0]);
     }
+  };
+
+  const handleClear = () => {
+    setSearchQuery('');
+    setIsDropdownOpen(true);
   };
 
   return (
@@ -72,8 +75,7 @@ export default function SearchCard({
         </div>
 
         <form onSubmit={handleSearchSubmit} className="space-y-4">
-
-          {/* Search Input — large for easy typing */}
+          {/* Search Input */}
           <div className="relative" ref={dropdownRef}>
             <div className="relative flex items-center">
               <input
@@ -81,17 +83,14 @@ export default function SearchCard({
                 value={searchQuery}
                 onChange={handleInputChange}
                 onFocus={() => setIsDropdownOpen(true)}
-                placeholder={
-                  selectedRoute
-                    ? `📍 ${selectedRoute.englishName}`
-                    : 'Type destination...'
-                }
+                onClick={() => setIsDropdownOpen(true)}
+                placeholder="Search destination..."
                 className="w-full bg-slate-50 text-slate-900 placeholder:text-slate-400 pl-4 pr-12 py-4 rounded-2xl border-2 border-blue-500 focus:border-blue-600 focus:bg-white focus:ring-4 focus:ring-blue-500/10 text-base font-semibold outline-none transition-all duration-200 min-h-[56px]"
               />
               {searchQuery ? (
                 <button
                   type="button"
-                  onClick={() => setSearchQuery('')}
+                  onClick={handleClear}
                   className="absolute right-3 p-2 rounded-full text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                 >
                   <X className="w-5 h-5" />
@@ -105,17 +104,17 @@ export default function SearchCard({
 
             {/* Autocomplete Dropdown */}
             <AnimatePresence>
-              {isDropdownOpen && searchQuery.trim().length > 0 && (
+              {isDropdownOpen && (
                 <motion.div
-                  initial={{ opacity: 0, y: -5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -5 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-2xl border border-slate-100 max-h-64 overflow-y-auto z-50"
+                  initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                  transition={{ duration: 0.2, ease: 'easeOut' }}
+                  className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-2xl border border-slate-100 max-h-72 overflow-y-auto z-50 divide-y divide-slate-100"
                 >
                   {loadingRoutes ? (
                     <div className="p-5 text-center text-sm text-slate-500 font-medium">
-                      Loading destinations...
+                      Loading destinations from Google Sheet...
                     </div>
                   ) : filteredRoutes.length > 0 ? (
                     filteredRoutes.map((route) => {
@@ -125,16 +124,20 @@ export default function SearchCard({
                           key={route.id}
                           type="button"
                           onClick={() => handleSelectSuggestion(route)}
-                          className="w-full px-4 py-4 text-left border-b border-slate-50 last:border-0 hover:bg-blue-50 flex items-center justify-between gap-3 transition-colors min-h-[60px]"
+                          className={`w-full px-4 py-3.5 text-left hover:bg-blue-50/80 active:bg-blue-100/60 flex items-center justify-between gap-3 transition-colors min-h-[56px] cursor-pointer ${
+                            isSelected ? 'bg-blue-50/90 font-bold' : ''
+                          }`}
                         >
-                          <div className="flex items-center gap-3">
-                            <MapPin className="w-5 h-5 text-blue-500 shrink-0" />
-                            <div>
-                              <p className="text-base font-bold text-slate-800">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <MapPin className={`w-5 h-5 shrink-0 ${isSelected ? 'text-blue-600' : 'text-slate-400'}`} />
+                            <div className="min-w-0 truncate">
+                              <span className="text-base font-bold text-slate-900">
                                 {route.englishName}
-                              </p>
+                              </span>
                               {route.malayalamName && (
-                                <p className="text-sm text-slate-500">{route.malayalamName}</p>
+                                <span className="text-sm font-semibold text-slate-500 ml-1.5">
+                                  / {route.malayalamName}
+                                </span>
                               )}
                             </div>
                           </div>
@@ -144,27 +147,13 @@ export default function SearchCard({
                     })
                   ) : (
                     <div className="p-5 text-center text-sm text-slate-500 font-medium">
-                      No results for &quot;{searchQuery}&quot;
+                      No matching destinations found for &quot;{searchQuery}&quot;
                     </div>
                   )}
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
-
-          {/* Popular Chips */}
-          <DestinationChips
-            popularRoutes={popularRoutes}
-            selectedRoute={selectedRoute}
-            onSelectRoute={(route) => {
-              onSelectRoute(route);
-              setIsDropdownOpen(false);
-              setTimeout(() => {
-                const el = document.getElementById('bus-results');
-                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }, 200);
-            }}
-          />
 
           {/* Big Search Button */}
           <button

@@ -1,7 +1,11 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ZoomIn } from 'lucide-react';
+import { X } from 'lucide-react';
+import { InstagramIcon, FacebookIcon } from './SocialIcons';
 import logoImg from '../assets/logo.png';
+
+const INSTAGRAM_URL = 'https://www.instagram.com/cathedral_ocym_pmdy?igsh=bWl0c2pyNHFsOXg3';
+const FACEBOOK_URL = 'https://www.facebook.com/share/14eoLzUtZy3/';
 
 export default function LogoModal({ isOpen, onClose }) {
   useEffect(() => {
@@ -59,8 +63,8 @@ export default function LogoModal({ isOpen, onClose }) {
               </h2>
             </div>
 
-            {/* Instagram / WhatsApp Style Zoomed Profile Photo */}
-            <div className="relative mx-auto w-56 h-56 sm:w-64 sm:h-64 rounded-full overflow-hidden border-4 border-amber-400 shadow-2xl shadow-amber-500/20 bg-slate-950 flex items-center justify-center group">
+            {/* Instagram / Profile Photo */}
+            <div className="relative mx-auto w-52 h-52 sm:w-60 sm:h-60 rounded-full overflow-hidden border-4 border-amber-400 shadow-2xl shadow-amber-500/20 bg-slate-950 flex items-center justify-center group">
               <img
                 src={logoImg}
                 alt="Cathedral OCYM Pampady Full Logo"
@@ -68,9 +72,36 @@ export default function LogoModal({ isOpen, onClose }) {
               />
             </div>
 
+            {/* Social Media Links */}
+            <div className="space-y-2.5 pt-1">
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                Follow Us On Social Media
+              </p>
+              <div className="flex items-center justify-center gap-3">
+                <a
+                  href={INSTAGRAM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 hover:opacity-90 text-white font-extrabold text-xs shadow-md hover:scale-105 active:scale-95 transition-all"
+                >
+                  <InstagramIcon className="w-4 h-4" />
+                  <span>Instagram</span>
+                </a>
+                <a
+                  href={FACEBOOK_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs shadow-md hover:scale-105 active:scale-95 transition-all"
+                >
+                  <FacebookIcon className="w-4 h-4" />
+                  <span>Facebook</span>
+                </a>
+              </div>
+            </div>
+
             {/* Footer notice */}
-            <div className="pt-2 text-xs text-slate-400 font-medium">
-              Tap anywhere to close
+            <div className="pt-1 text-xs text-slate-400 font-medium">
+              Tap backdrop or close button to dismiss
             </div>
           </motion.div>
         </div>

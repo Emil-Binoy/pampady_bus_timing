@@ -1,89 +1,169 @@
 import React from 'react';
-import { Bus, Clock, ShieldCheck, Heart, RefreshCw, Sparkles } from 'lucide-react';
+import { Mail, Phone, Clock, Heart, Code2 } from 'lucide-react';
+import { InstagramIcon, FacebookIcon } from './SocialIcons';
 import logoImg from '../assets/logo.png';
 
-export default function Footer({ lastUpdated, onRefresh, onOpenLogo }) {
+const INSTAGRAM_URL = 'https://www.instagram.com/cathedral_ocym_pmdy?igsh=bWl0c2pyNHFsOXg3';
+const FACEBOOK_URL = 'https://www.facebook.com/share/14eoLzUtZy3/';
+
+export default function Footer({ lastUpdated, onOpenLogo, onOpenAbout }) {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <footer className="w-full bg-slate-900 text-slate-400 border-t border-slate-800 mt-16 pt-12 pb-8 px-4 sm:px-6">
-      <div className="max-w-4xl mx-auto space-y-8">
+    <footer className="w-full bg-slate-950 text-slate-400 border-t border-slate-800 pt-16 pb-12 px-4 sm:px-6 relative">
+      <div className="max-w-5xl mx-auto space-y-12">
         
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pb-8 border-b border-slate-800">
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-12 pb-12 border-b border-slate-800/80">
           
-          {/* Brand Column */}
-          <div className="md:col-span-6 space-y-3">
+          {/* Brand Column (Col 1-5) */}
+          <div className="md:col-span-5 space-y-4">
             <div
               onClick={onOpenLogo}
               className="flex items-center gap-3 cursor-pointer group w-fit"
               title="Click to view logo"
             >
-              <div className="w-11 h-11 rounded-full overflow-hidden border-2 border-amber-400 bg-amber-950 flex items-center justify-center shrink-0 shadow-lg group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-amber-400 bg-slate-900 flex items-center justify-center shrink-0 shadow-lg group-hover:scale-110 transition-transform">
                 <img src={logoImg} alt="Cathedral OCYM Pampady" className="w-full h-full object-cover" />
               </div>
               <div>
-                <h3 className="text-base font-extrabold text-white leading-tight group-hover:text-amber-300 transition-colors">
+                <h3 className="text-lg font-extrabold text-white leading-tight group-hover:text-amber-400 transition-colors">
                   Pampady Bus Stand
                 </h3>
-                <p className="text-xs text-amber-400 font-bold">An Initiative by Cathedral OCYM Pampady</p>
+                <p className="text-xs text-blue-400 font-extrabold tracking-wide">Bus Timings</p>
+                <p className="text-[11px] text-amber-400 font-semibold">An Initiative by Cathedral OCYM Pampady</p>
               </div>
             </div>
 
-            <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
-              Your digital bus timetable for Pampady Bus Stand, Kottayam. Real-time access to KSRTC and Private bus schedules. Built & maintained by Cathedral OCYM Pampady.
+            <p className="text-xs text-slate-400 leading-relaxed max-w-sm font-medium">
+              Your digital timetable for Pampady Bus Stand, Kottayam. Real-time access to KSRTC and Private bus schedules. Built & maintained with care for all commuters.
             </p>
 
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-300 text-xs font-medium">
-              <Clock className="w-3.5 h-3.5 text-blue-400" />
-              <span>Last Updated: <strong className="text-white">{lastUpdated || '17-06-2026'}</strong></span>
+            {/* Social Media Icons */}
+            <div className="pt-2 flex items-center gap-3">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Follow Us:</span>
+              <a
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center shadow-md hover:scale-110 active:scale-95 transition-all"
+                title="Instagram - @cathedral_ocym_pmdy"
+              >
+                <InstagramIcon className="w-4 h-4" />
+              </a>
+              <a
+                href={FACEBOOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center shadow-md hover:scale-110 active:scale-95 transition-all"
+                title="Facebook - Cathedral OCYM Pampady"
+              >
+                <FacebookIcon className="w-4 h-4" />
+              </a>
             </div>
           </div>
 
-          {/* Quick Links & Info */}
-          <div className="md:col-span-6 grid grid-cols-2 gap-6 text-xs">
-            <div className="space-y-2">
-              <h4 className="font-bold text-white uppercase tracking-wider text-[11px] text-slate-300">
-                Information
-              </h4>
-              <ul className="space-y-1.5 text-slate-400">
-                <li>• Timings are subject to change.</li>
-                <li>• Arrive 5-10 min early.</li>
-                <li>• Live Google Sheets Sync.</li>
-              </ul>
-            </div>
-
-            <div className="space-y-2">
-              <h4 className="font-bold text-white uppercase tracking-wider text-[11px] text-slate-300">
-                Popular Hubs
-              </h4>
-              <ul className="space-y-1.5 text-slate-400">
-                <li>Kottayam • Ernakulam</li>
-                <li>Changanassery • Pala</li>
-                <li>Thiruvalla • Kanjirapally</li>
-              </ul>
-            </div>
+          {/* Quick Links Column (Col 6-8) */}
+          <div className="md:col-span-3 space-y-3">
+            <h4 className="font-extrabold text-white text-xs uppercase tracking-widest text-slate-300">
+              Quick Links
+            </h4>
+            <ul className="space-y-2 text-xs font-medium">
+              <li>
+                <button
+                  onClick={scrollToTop}
+                  className="hover:text-blue-400 transition-colors flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span>• Home</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => document.getElementById('search-card-section')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="hover:text-blue-400 transition-colors flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span>• Search Destinations</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={onOpenAbout}
+                  className="hover:text-blue-400 transition-colors flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span>• About Initiative</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="hover:text-blue-400 transition-colors flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span>• Contact Us</span>
+                </button>
+              </li>
+            </ul>
           </div>
+
+          {/* Contact Information Column (Col 9-12) */}
+          <div className="md:col-span-4 space-y-3">
+            <h4 className="font-extrabold text-white text-xs uppercase tracking-widest text-slate-300">
+              Contact Information
+            </h4>
+            <ul className="space-y-2.5 text-xs font-medium">
+              <li className="flex items-center gap-2">
+                <Mail className="w-4 h-4 text-blue-400 shrink-0" />
+                <a
+                  href="mailto:cathedralocympdy@gmail.com"
+                  className="hover:text-blue-400 transition-colors underline underline-offset-2 decoration-slate-700 hover:decoration-blue-400 break-all"
+                >
+                  cathedralocympdy@gmail.com
+                </a>
+              </li>
+              <li className="flex items-center gap-2">
+                <Phone className="w-4 h-4 text-emerald-400 shrink-0" />
+                <a
+                  href="tel:+918714020231"
+                  className="hover:text-emerald-400 transition-colors underline underline-offset-2 decoration-slate-700 hover:decoration-emerald-400"
+                >
+                  +91 87140 20231
+                </a>
+              </li>
+              <li className="pt-1 flex items-center gap-2 text-slate-400">
+                <Clock className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>Last Updated: <strong className="text-white font-bold">{lastUpdated || '17-06-2026'}</strong></span>
+              </li>
+            </ul>
+          </div>
+
         </div>
 
-        {/* Bottom Credits & Copyright */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <div className="flex items-center gap-1.5 flex-wrap justify-center sm:justify-start">
-            <span>Pampady Bus Stand Timings © {new Date().getFullYear()}</span>
-            <span>•</span>
-            <span
-              onClick={onOpenLogo}
-              className="flex items-center gap-1 text-slate-300 font-semibold cursor-pointer hover:text-amber-400 transition-colors"
-              title="Click to view logo"
-            >
-              Built with <Heart className="w-3 h-3 text-red-500 fill-red-500 inline" /> by <strong className="text-amber-400 font-bold underline underline-offset-2">Cathedral OCYM Pampady</strong>
+        {/* Bottom Bar: Copyright & Developer Credit */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-medium">
+          
+          <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
+            <span>© {new Date().getFullYear()} Pampady Bus Stand Timings.</span>
+            <span className="hidden sm:inline">•</span>
+            <span className="text-slate-400">Initiative by <strong className="text-amber-400 font-bold">Cathedral OCYM Pampady</strong></span>
+          </div>
+
+          {/* Designed & Developed Credit */}
+          <div className="flex items-center gap-2 bg-slate-900 px-3.5 py-1.5 rounded-xl border border-slate-800/80 shadow-xs">
+            <Code2 className="w-3.5 h-3.5 text-blue-400" />
+            <span>
+              Designed & Developed by{' '}
+              <a
+                href="https://emil-binoy.github.io/Portfolio-using-React/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-200 font-bold hover:text-blue-400 underline underline-offset-2 decoration-blue-500/40 transition-colors"
+              >
+                Emil Binoy
+              </a>
             </span>
           </div>
 
-          <button
-            onClick={onRefresh}
-            className="flex items-center gap-1.5 text-slate-400 hover:text-blue-400 transition-colors"
-          >
-            <RefreshCw className="w-3.5 h-3.5" />
-            <span>Force Refresh Sheet Data</span>
-          </button>
         </div>
 
       </div>
