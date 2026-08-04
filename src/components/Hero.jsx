@@ -32,51 +32,40 @@ export default function Hero({ onOpenLogo, onOpenAbout, lastUpdated }) {
         />
       </div>
 
-      {/* ── Fixed Floating Hamburger Menu Button (Positioned over Hero, below top Navbar) ── */}
-      <div className="fixed top-16 right-4 sm:top-18 sm:right-6 z-40">
+      {/* ── Fixed Floating Menu Button (Positioned cleanly under sticky Navbar) ── */}
+      <div className="fixed top-[90px] right-4 sm:top-[96px] sm:right-6 z-[110]">
         <button
-          onClick={() => setMenuOpen(true)}
-          aria-label="Open menu"
+          onClick={() => setMenuOpen((prev) => !prev)}
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           className="bg-slate-900/80 hover:bg-slate-900 active:scale-95 backdrop-blur-md border border-white/20 text-white shadow-xl rounded-2xl p-2.5 sm:p-3 min-h-[44px] min-w-[44px] flex items-center justify-center transition-all cursor-pointer group"
-          title="Open Menu"
+          title={menuOpen ? 'Close Menu' : 'Open Menu'}
         >
-          <Menu className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+          {menuOpen ? (
+            <X className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+          ) : (
+            <Menu className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+          )}
         </button>
       </div>
 
       {/* ── Text content sits on top of photo ── */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 pt-6 pb-20 sm:pb-24">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 pt-6 pb-20 sm:pb-24 flex justify-center">
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="max-w-md space-y-3"
+          className="max-w-md mx-auto flex flex-col items-center space-y-3"
         >
-          {/* Builder / Initiator Badge */}
-          <div
-            onClick={onOpenLogo}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-900 text-white backdrop-blur-md shadow-lg border border-amber-500/40 cursor-pointer hover:scale-105 active:scale-95 transition-all"
-            title="Click to view logo"
-          >
-            <img
-              src={logoImg}
-              alt="Cathedral OCYM Pampady Logo"
-              className="w-6 h-6 rounded-full object-cover border border-amber-400 shrink-0"
-            />
-            <span className="text-xs font-semibold tracking-wide text-slate-200">
-              Built by <strong className="text-amber-400 font-extrabold">Cathedral OCYM Pampady</strong>
-            </span>
-          </div>
 
           {/* Main heading */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight tracking-tight drop-shadow-xs">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight tracking-tight drop-shadow-xs flex flex-col items-center text-center">
             Bus Timings
             <br />
             <span className="text-blue-700">via Pampady Bus Stand</span>
           </h1>
 
           {/* Subheading */}
-          <p className="text-sm sm:text-base text-slate-700 font-medium leading-relaxed max-w-xs sm:max-w-sm">
+          <p className="text-sm sm:text-base text-black font-medium leading-relaxed max-w-xs sm:max-w-sm flex flex-col items-center text-center mx-auto">
             Find accurate timings for all buses passing through Pampady Bus Stand.
           </p>
         </motion.div>

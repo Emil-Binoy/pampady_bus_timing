@@ -4,8 +4,8 @@ import logoImg from '../assets/logo.png';
 
 export default function Navbar({ onOpenLogo }) {
   return (
-    <header className="sticky top-0 z-30 w-full bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs py-2.5 px-4">
-      <div className="max-w-2xl mx-auto flex items-center justify-center gap-3">
+    <header className="sticky top-0 z-100 w-full bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs py-2.5 px-4">
+      <div className="max-w-2xl mx-auto flex flex-col items-center justify-center gap-1.5">
         {/* Animated Logo with subtle bounce */}
         <motion.div
           animate={{ y: [0, -4, 0] }}
@@ -17,13 +17,11 @@ export default function Navbar({ onOpenLogo }) {
           <img src={logoImg} alt="Cathedral OCYM Pampady Logo" className="w-full h-full object-cover" />
         </motion.div>
 
-        {/* Vertically Centered Title & Subtitle */}
-        <div className="flex flex-col items-start justify-center min-w-0">
-          <h1 className="text-base sm:text-lg font-extrabold text-slate-900 leading-tight truncate">
-            Pampady Bus Stand
-          </h1>
-          <p className="text-xs font-extrabold text-blue-600 truncate tracking-wide">
-            Bus Timings
+        {/* Centered Title & Subtitle under Logo */}
+        <div className="flex flex-col items-center justify-center min-w-0 text-center">
+          
+          <p className="text-xs font-bold text-yellow-600 truncate tracking-wide">
+            St. John's Orthodox Cathedral OCYM, Pampady
           </p>
         </div>
       </div>
