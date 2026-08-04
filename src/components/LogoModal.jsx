@@ -55,16 +55,14 @@ export default function LogoModal({ isOpen, onClose }) {
 
             {/* Title Header */}
             <div className="space-y-1 pt-2">
-              <span className="text-[11px] font-extrabold uppercase tracking-widest text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">
-                Official Logo
-              </span>
+              
               <h2 className="text-xl sm:text-2xl font-extrabold text-white">
                 Cathedral OCYM Pampady
               </h2>
             </div>
 
             {/* Instagram / Profile Photo */}
-            <div className="relative mx-auto w-52 h-52 sm:w-60 sm:h-60 rounded-full overflow-hidden border-4 border-amber-400 shadow-2xl shadow-amber-500/20 bg-slate-950 flex items-center justify-center group">
+            <div className="relative mx-auto w-52 h-52 sm:w-60 sm:h-60 rounded-full overflow-hidden shadow-2xl shadow-amber-500/20 bg-slate-950 flex items-center justify-center group">
               <img
                 src={logoImg}
                 alt="Cathedral OCYM Pampady Full Logo"
@@ -99,10 +97,7 @@ export default function LogoModal({ isOpen, onClose }) {
               </div>
             </div>
 
-            {/* Footer notice */}
-            <div className="pt-1 text-xs text-slate-400 font-medium">
-              Tap backdrop or close button to dismiss
-            </div>
+            
           </motion.div>
         </div>
       )}
