@@ -31,6 +31,8 @@ export default function Home() {
     routesError,
     busesError,
     lastUpdated,
+    contactPhone,
+    contactEmail,
     busFilter,
     setBusFilter,
     handleRefresh,
@@ -89,12 +91,18 @@ export default function Home() {
         )}
 
         {/* Contact Section */}
-        <ContactSection />
+        <ContactSection
+          phone={contactPhone}
+          email={contactEmail}
+          loading={loadingRoutes}
+        />
       </main>
 
       {/* Modern Footer */}
       <Footer
         lastUpdated={lastUpdated}
+        phone={contactPhone}
+        email={contactEmail}
         onOpenLogo={handleOpenLogo}
         onOpenAbout={handleOpenAbout}
       />

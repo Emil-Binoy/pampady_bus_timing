@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { fetchRoutes, fetchDestinationBuses, fetchSettings, clearCache } from '../services/googleSheets';
+import { fetchRoutes, fetchDestinationBuses, fetchSettings, fetchContact, clearCache } from '../services/googleSheets';
 
 // Popular destinations list specified in requirements
 const POPULAR_DESTINATION_KEYS = [
@@ -16,6 +16,8 @@ export function useBusData() {
   const [buses, setBuses] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [lastUpdated, setLastUpdated] = useState('17-06-2026');
+  const [contactPhone, setContactPhone] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
   const [busFilter, setBusFilter] = useState('UPCOMING'); // 'UPCOMING' | 'ALL' | 'KSRTC' | 'PRIVATE'
 
   const [loadingRoutes, setLoadingRoutes] = useState(true);
@@ -23,20 +25,22 @@ export function useBusData() {
   const [routesError, setRoutesError] = useState(null);
   const [busesError, setBusesError] = useState(null);
 
-  // Fetch initial routes and settings
+  // Fetch initial routes, settings, and contact info
   const initData = useCallback(async () => {
     setLoadingRoutes(true);
     setRoutesError(null);
     try {
-      const [fetchedRoutes, fetchedSettings] = await Promise.all([
+      const [fetchedRoutes, fetchedSettings, fetchedContact] = await Promise.all([
         fetchRoutes(),
         fetchSettings(),
+        fetchContact(),
       ]);
 
       setRoutes(fetchedRoutes);
       setLastUpdated(fetchedSettings.lastUpdated || '17-06-2026');
+      setContactPhone(fetchedContact.phone || '');
+      setContactEmail(fetchedContact.email || '');
 
-      
     } catch (err) {
       console.error('Error initializing bus data:', err);
       setRoutesError('Failed to load bus routes. Please check your internet connection.');
@@ -97,7 +101,7 @@ export function useBusData() {
   // Popular routes mapped to actual route objects
   const popularRoutes = useMemo(() => {
     if (!routes || routes.length === 0) return [];
-    
+
     return POPULAR_DESTINATION_KEYS.map((key) => {
       const keyLower = key.toLowerCase();
       // First try exact match or boundary match
@@ -189,6 +193,8 @@ export function useBusData() {
     routesError,
     busesError,
     lastUpdated,
+    contactPhone,
+    contactEmail,
     busFilter,
     setBusFilter,
     handleRefresh,

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Phone, Copy, Check, MessageSquare } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export default function ContactSection() {
+export default function ContactSection({ phone = '', email = '', loading = false }) {
   const [copiedField, setCopiedField] = useState(null);
 
   const handleCopy = (text, field) => {
@@ -10,6 +10,14 @@ export default function ContactSection() {
     setCopiedField(field);
     setTimeout(() => setCopiedField(null), 2000);
   };
+
+  // Build a clean tel: href – strip spaces/dashes for the href but keep display text
+  const phoneHref = phone ? `tel:${phone.replace(/[\s\-()]/g, '')}` : '#';
+
+  // Skeleton placeholder shown while loading
+  const SkeletonLine = () => (
+    <div className="h-5 w-48 rounded-lg bg-slate-700/60 animate-pulse" />
+  );
 
   return (
     <section id="contact" className="max-w-4xl mx-auto px-4 sm:px-6 my-16">
@@ -50,28 +58,39 @@ export default function ContactSection() {
                   </div>
                   <div>
                     <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Email Us</p>
-                    <a
-                      href="mailto:cathedralocympdy@gmail.com"
-                      className="text-base sm:text-lg font-bold text-white hover:text-blue-400 transition-colors break-all underline underline-offset-4 decoration-blue-500/40 hover:decoration-blue-400"
-                    >
-                      cathedralocympdy@gmail.com
-                    </a>
+                    {loading ? (
+                      <SkeletonLine />
+                    ) : email ? (
+                      <a
+                        href={`mailto:${email}`}
+                        className="text-base sm:text-lg font-bold text-white hover:text-blue-400 transition-colors break-all underline underline-offset-4 decoration-blue-500/40 hover:decoration-blue-400"
+                      >
+                        {email}
+                      </a>
+                    ) : (
+                      <span className="text-sm text-slate-500 italic">Not available</span>
+                    )}
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-2 pt-2 border-t border-slate-700/60">
                 <a
-                  href="mailto:cathedralocympdy@gmail.com"
-                  className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs text-center transition-colors shadow-sm flex items-center justify-center gap-1.5"
+                  href={email ? `mailto:${email}` : '#'}
+                  className={`flex-1 font-bold py-2.5 px-4 rounded-xl text-xs text-center transition-colors shadow-sm flex items-center justify-center gap-1.5 ${
+                    email
+                      ? 'bg-blue-600 hover:bg-blue-500 text-white'
+                      : 'bg-slate-700/50 text-slate-500 cursor-not-allowed pointer-events-none'
+                  }`}
                 >
                   <Mail className="w-4 h-4" /> Send Email
                 </a>
                 <button
                   type="button"
-                  onClick={() => handleCopy('cathedralocympdy@gmail.com', 'email')}
-                  className="p-2.5 rounded-xl bg-slate-700/60 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                  onClick={() => email && handleCopy(email, 'email')}
+                  className={`p-2.5 rounded-xl bg-slate-700/60 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors ${!email ? 'opacity-40 cursor-not-allowed' : ''}`}
                   title="Copy email address"
+                  disabled={!email}
                 >
                   {copiedField === 'email' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
                 </button>
@@ -87,28 +106,39 @@ export default function ContactSection() {
                   </div>
                   <div>
                     <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Call Us</p>
-                    <a
-                      href="tel:+918714020231"
-                      className="text-base sm:text-lg font-bold text-white hover:text-emerald-400 transition-colors underline underline-offset-4 decoration-emerald-500/40 hover:decoration-emerald-400"
-                    >
-                      +91 87140 20231
-                    </a>
+                    {loading ? (
+                      <SkeletonLine />
+                    ) : phone ? (
+                      <a
+                        href={phoneHref}
+                        className="text-base sm:text-lg font-bold text-white hover:text-emerald-400 transition-colors underline underline-offset-4 decoration-emerald-500/40 hover:decoration-emerald-400"
+                      >
+                        {phone}
+                      </a>
+                    ) : (
+                      <span className="text-sm text-slate-500 italic">Not available</span>
+                    )}
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-2 pt-2 border-t border-slate-700/60">
                 <a
-                  href="tel:+918714020231"
-                  className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs text-center transition-colors shadow-sm flex items-center justify-center gap-1.5"
+                  href={phone ? phoneHref : '#'}
+                  className={`flex-1 font-bold py-2.5 px-4 rounded-xl text-xs text-center transition-colors shadow-sm flex items-center justify-center gap-1.5 ${
+                    phone
+                      ? 'bg-emerald-600 hover:bg-emerald-500 text-white'
+                      : 'bg-slate-700/50 text-slate-500 cursor-not-allowed pointer-events-none'
+                  }`}
                 >
                   <Phone className="w-4 h-4" /> Call Now
                 </a>
                 <button
                   type="button"
-                  onClick={() => handleCopy('+91 87140 20231', 'phone')}
-                  className="p-2.5 rounded-xl bg-slate-700/60 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                  onClick={() => phone && handleCopy(phone, 'phone')}
+                  className={`p-2.5 rounded-xl bg-slate-700/60 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors ${!phone ? 'opacity-40 cursor-not-allowed' : ''}`}
                   title="Copy phone number"
+                  disabled={!phone}
                 >
                   {copiedField === 'phone' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
                 </button>

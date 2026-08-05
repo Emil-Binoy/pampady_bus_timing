@@ -6,7 +6,7 @@ import logoImg from '../assets/logo.png';
 const INSTAGRAM_URL = 'https://www.instagram.com/cathedral_ocym_pmdy?igsh=bWl0c2pyNHFsOXg3';
 const FACEBOOK_URL = 'https://www.facebook.com/share/14eoLzUtZy3/';
 
-export default function Footer({ lastUpdated, onOpenLogo, onOpenAbout }) {
+export default function Footer({ lastUpdated, phone = '', email = '', onOpenLogo, onOpenAbout }) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -14,10 +14,10 @@ export default function Footer({ lastUpdated, onOpenLogo, onOpenAbout }) {
   return (
     <footer className="w-full bg-slate-950 text-slate-400 border-t border-slate-800 pt-16 pb-12 px-4 sm:px-6 relative">
       <div className="max-w-5xl mx-auto space-y-12">
-        
+
         {/* Main Grid */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-12 pb-12 border-b border-slate-800/80">
-          
+
           {/* Brand Column (Col 1-5) */}
           <div className="md:col-span-5 space-y-4">
             <div
@@ -112,24 +112,28 @@ export default function Footer({ lastUpdated, onOpenLogo, onOpenAbout }) {
               Contact Information
             </h4>
             <ul className="space-y-2.5 text-xs font-medium">
-              <li className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-blue-400 shrink-0" />
-                <a
-                  href="mailto:cathedralocympdy@gmail.com"
-                  className="hover:text-blue-400 transition-colors underline underline-offset-2 decoration-slate-700 hover:decoration-blue-400 break-all"
-                >
-                  cathedralocympdy@gmail.com
-                </a>
-              </li>
-              <li className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-emerald-400 shrink-0" />
-                <a
-                  href="tel:+918714020231"
-                  className="hover:text-emerald-400 transition-colors underline underline-offset-2 decoration-slate-700 hover:decoration-emerald-400"
-                >
-                  +91 87140 20231
-                </a>
-              </li>
+              {email && (
+                <li className="flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-blue-400 shrink-0" />
+                  <a
+                    href={`mailto:${email}`}
+                    className="hover:text-blue-400 transition-colors underline underline-offset-2 decoration-slate-700 hover:decoration-blue-400 break-all"
+                  >
+                    {email}
+                  </a>
+                </li>
+              )}
+              {phone && (
+                <li className="flex items-center gap-2">
+                  <Phone className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <a
+                    href={`tel:${phone.replace(/[\s\-()]/g, '')}`}
+                    className="hover:text-emerald-400 transition-colors underline underline-offset-2 decoration-slate-700 hover:decoration-emerald-400"
+                  >
+                    {phone}
+                  </a>
+                </li>
+              )}
               <li className="pt-1 flex items-center gap-2 text-slate-400">
                 <Clock className="w-4 h-4 text-amber-400 shrink-0" />
                 <span>Last Updated: <strong className="text-white font-bold">{lastUpdated || '17-06-2026'}</strong></span>
@@ -141,7 +145,7 @@ export default function Footer({ lastUpdated, onOpenLogo, onOpenAbout }) {
 
         {/* Bottom Bar: Copyright & Developer Credit */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-medium">
-          
+
           <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
             <span>© {new Date().getFullYear()} Pampady Bus Stand Timings.</span>
             <span className="hidden sm:inline">•</span>

@@ -151,7 +151,7 @@ export async function fetchRoutes() {
  */
 export async function fetchDestinationBuses(destinationSheetName, forceRefresh = false) {
   if (!destinationSheetName) return [];
-  
+
   const cacheKey = `sheet_dest_${destinationSheetName}`;
   if (!forceRefresh && memoryCache.has(cacheKey)) {
     return memoryCache.get(cacheKey);
@@ -246,6 +246,84 @@ export async function fetchSettings() {
     console.warn('Could not fetch settings sheet, using fallback date', err);
     return { lastUpdated: '17-06-2026' };
   }
+}
+
+/**
+ * Fetches contact information from the separate "Contact" sheet.
+ * Tries multiple sheet tab name variations ('Contact', 'Contact ', etc.) to handle trailing spaces in Google Sheets.
+ * Parses Key-Value rows or direct pattern matches (email/phone).
+ * @returns {Promise<{ phone: string, email: string }>}
+ */
+export async function fetchContact() {
+  const cacheKey = 'sheet_Contact';
+  if (memoryCache.has(cacheKey)) {
+    return memoryCache.get(cacheKey);
+  }
+
+  const candidateNames = ['Contact', 'Contact ', 'Contacts', 'Contact Details', 'contact'];
+
+  for (const sheetName of candidateNames) {
+    try {
+      const url = `${BASE_URL}&sheet=${encodeURIComponent(sheetName)}`;
+      const response = await fetch(url);
+      if (!response.ok) continue;
+
+      const text = await response.text();
+      const gviz = parseGVizResponse(text);
+      const rows = gviz?.table?.rows || [];
+
+      if (rows.length === 0) continue;
+
+      // Detect if GViz fell back to the default "Routes" sheet because the tab name wasn't matched
+      const firstCell = String(rows[0]?.c?.[0]?.v || '').trim().toLowerCase();
+      if (firstCell === 'route name' || firstCell === 'routes') {
+        continue;
+      }
+
+      let phone = '';
+      let email = '';
+
+      rows.forEach((row) => {
+        if (!row?.c) return;
+        const cell0 = row.c[0]?.v ?? row.c[0]?.f;
+        const cell1 = row.c[1]?.v ?? row.c[1]?.f;
+
+        const val0 = cell0 !== undefined && cell0 !== null ? String(cell0).trim() : '';
+        const val1 = cell1 !== undefined && cell1 !== null ? String(cell1).trim() : '';
+        const keyNorm = val0.toLowerCase();
+
+        // Match phone keys (e.g. "Secretary Phone number", "Phone", "Mobile", "Secratary Phone number")
+        if (!phone && (keyNorm.includes('phone') || keyNorm.includes('mobile') || keyNorm.includes('tel') || keyNorm.includes('secratary') || keyNorm.includes('secretary'))) {
+          if (val1) phone = val1;
+        }
+
+        // Match email keys (e.g. "Email", "Mail")
+        if (!email && (keyNorm.includes('email') || keyNorm.includes('mail'))) {
+          if (val1) email = val1;
+        }
+
+        // Fallback pattern detection in either column
+        [val0, val1].forEach((str) => {
+          if (!email && str.includes('@') && str.includes('.')) {
+            email = str;
+          }
+          if (!phone && /^\+?\d[\d\s\-()]{7,}$/.test(str) && !str.toLowerCase().includes('route') && !str.toLowerCase().includes('mile')) {
+            phone = str;
+          }
+        });
+      });
+
+      if (phone || email) {
+        const contactData = { phone, email };
+        memoryCache.set(cacheKey, contactData);
+        return contactData;
+      }
+    } catch (err) {
+      console.warn(`Error fetching sheet with name "${sheetName}":`, err);
+    }
+  }
+
+  return { phone: '', email: '' };
 }
 
 /**
