@@ -21,14 +21,14 @@ export default function AboutModal({ isOpen, onClose }) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+        <div className="fixed inset-0 z-[120] flex items-start justify-center overflow-y-auto p-4 sm:p-6 pt-8 sm:pt-12">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/80 backdrop-blur-md cursor-pointer"
+            className="fixed inset-0 z-0 bg-black/80 backdrop-blur-md cursor-pointer"
           />
 
           {/* Modal Content */}
@@ -37,7 +37,7 @@ export default function AboutModal({ isOpen, onClose }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="relative z-10 max-w-lg w-full bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-800 text-white space-y-6 max-h-[90vh] overflow-y-auto"
+            className="relative z-10 max-w-lg w-full bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-800 text-white space-y-6 my-auto"
           >
             {/* Close Button */}
             <button
