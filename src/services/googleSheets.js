@@ -250,8 +250,8 @@ export async function fetchSettings() {
 
 /**
  * Fetches contact information from the separate "Contact" sheet.
- * Tries multiple sheet tab name variations ('Contact', 'Contact ', etc.) to handle trailing spaces in Google Sheets.
- * Parses Key-Value rows or direct pattern matches (email/phone).
+ * Tries candidate sheet tab names ('Contact', 'Contact ', etc.).
+ * Scans both table.cols (headers) and table.rows to handle cases where GViz treats top rows as headers.
  * @returns {Promise<{ phone: string, email: string }>}
  */
 export async function fetchContact() {
@@ -270,12 +270,11 @@ export async function fetchContact() {
 
       const text = await response.text();
       const gviz = parseGVizResponse(text);
+      const cols = gviz?.table?.cols || [];
       const rows = gviz?.table?.rows || [];
 
-      if (rows.length === 0) continue;
-
-      // Detect if GViz fell back to the default "Routes" sheet because the tab name wasn't matched
-      const firstCell = String(rows[0]?.c?.[0]?.v || '').trim().toLowerCase();
+      // Check if GViz fell back to the default "Routes" sheet
+      const firstCell = String(rows[0]?.c?.[0]?.v || cols[0]?.label || '').trim().toLowerCase();
       if (firstCell === 'route name' || firstCell === 'routes') {
         continue;
       }
@@ -283,6 +282,31 @@ export async function fetchContact() {
       let phone = '';
       let email = '';
 
+      // Collect all string tokens from cols (headers) and rows (data cells)
+      const allTokens = [];
+
+      cols.forEach((col) => {
+        if (col?.label) allTokens.push(String(col.label).trim());
+        if (col?.id) allTokens.push(String(col.id).trim());
+      });
+
+      rows.forEach((row) => {
+        if (!row?.c) return;
+        row.c.forEach((cell) => {
+          const val = cell?.v ?? cell?.f;
+          if (val !== undefined && val !== null) {
+            allTokens.push(String(val).trim());
+          }
+        });
+      });
+
+      // 1. Find Email anywhere in tokens (contains @ and .)
+      const emailToken = allTokens.find((t) => t.includes('@') && t.includes('.'));
+      if (emailToken) {
+        email = emailToken;
+      }
+
+      // 2. Find Phone from Key-Value rows or tokens matching phone patterns
       rows.forEach((row) => {
         if (!row?.c) return;
         const cell0 = row.c[0]?.v ?? row.c[0]?.f;
@@ -292,26 +316,16 @@ export async function fetchContact() {
         const val1 = cell1 !== undefined && cell1 !== null ? String(cell1).trim() : '';
         const keyNorm = val0.toLowerCase();
 
-        // Match phone keys (e.g. "Secretary Phone number", "Phone", "Mobile", "Secratary Phone number")
         if (!phone && (keyNorm.includes('phone') || keyNorm.includes('mobile') || keyNorm.includes('tel') || keyNorm.includes('secratary') || keyNorm.includes('secretary'))) {
           if (val1) phone = val1;
         }
-
-        // Match email keys (e.g. "Email", "Mail")
-        if (!email && (keyNorm.includes('email') || keyNorm.includes('mail'))) {
-          if (val1) email = val1;
-        }
-
-        // Fallback pattern detection in either column
-        [val0, val1].forEach((str) => {
-          if (!email && str.includes('@') && str.includes('.')) {
-            email = str;
-          }
-          if (!phone && /^\+?\d[\d\s\-()]{7,}$/.test(str) && !str.toLowerCase().includes('route') && !str.toLowerCase().includes('mile')) {
-            phone = str;
-          }
-        });
       });
+
+      // If phone wasn't found in key-value rows, check cols or all tokens for number patterns
+      if (!phone) {
+        const phoneToken = allTokens.find((t) => /^\+?\d[\d\s\-()]{7,}$/.test(t) && !t.toLowerCase().includes('route') && !t.toLowerCase().includes('mile'));
+        if (phoneToken) phone = phoneToken;
+      }
 
       if (phone || email) {
         const contactData = { phone, email };
