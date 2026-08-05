@@ -4,6 +4,7 @@ import { Menu, X, Home as HomeIcon, PhoneCall, Info } from 'lucide-react';
 import { InstagramIcon, FacebookIcon } from './SocialIcons';
 import busStandImg from '../assets/bus_stand.png';
 import logoImg from '../assets/logo.png';
+import DigitalClock from './DigitalClock';
 
 const INSTAGRAM_URL = 'https://www.instagram.com/cathedral_ocym_pmdy?igsh=bWl0c2pyNHFsOXg3';
 const FACEBOOK_URL = 'https://www.facebook.com/share/14eoLzUtZy3/';
@@ -68,6 +69,11 @@ export default function Hero({ onOpenLogo, onOpenAbout, lastUpdated }) {
           <p className="text-sm sm:text-base text-black font-medium leading-relaxed max-w-xs sm:max-w-sm flex flex-col items-center text-center mx-auto">
             Find accurate timings for all buses passing through Pampady Bus Stand.
           </p>
+
+          {/* Digital Clock */}
+          <div className="flex justify-center pt-1">
+            <DigitalClock />
+          </div>
         </motion.div>
       </div>
 

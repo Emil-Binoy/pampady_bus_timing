@@ -70,7 +70,7 @@ export default function AboutModal({ isOpen, onClose }) {
                 <strong>Pampady Bus Stand Timings</strong> is a community-driven digital initiative created to provide accurate, real-time bus schedules for all passengers traveling through Pampady Bus Stand, Kottayam.
               </p>
               <p>
-                Whether you are commuting locally to Kottayam, Changanassery, Pala, Thiruvalla, or traveling long-distance via KSRTC and Private buses, this platform offers quick and updated information directly from verified local schedules.
+                Whether you are commuting locally via pampady bus stand to Kottayam, kumily, Changanassery, Pala,  or traveling long-distance via KSRTC and Private buses, this platform offers quick and updated information directly from verified local schedules.
               </p>
 
               <div className="bg-slate-800/80 rounded-2xl p-4 border border-slate-700/80 space-y-2">
@@ -78,7 +78,6 @@ export default function AboutModal({ isOpen, onClose }) {
                   <ShieldCheck className="w-4 h-4 text-blue-400" /> Key Features
                 </div>
                 <ul className="text-xs space-y-1.5 text-slate-300">
-                  <li>• Dynamic schedule synchronization with official sheets</li>
                   <li>• Categorized KSRTC and Private bus listings</li>
                   <li>• Upcoming bus notifications based on current time</li>
                   <li>• Accessible, mobile-friendly interface in English & Malayalam</li>
